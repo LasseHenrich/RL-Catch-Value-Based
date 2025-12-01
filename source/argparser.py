@@ -30,7 +30,7 @@ def get_args():
     parser.add_argument("--epsilon_decay_rate", type=float, default=1000,
                         help="Number of steps to decay epsilon over")
     parser.add_argument("--buffer_capacity", type=int, default=1000,
-                        help="Capacity of replay buffer")
+                        help="Capacity of replay buffer, i.e., how many trajectories it can store")
     parser.add_argument("--replay_warmup_steps", type=int, default=100,
                         help="Number of steps to warm up replay buffer")
     parser.add_argument("--prioritized_replay", action="store_true",
@@ -49,6 +49,8 @@ def get_args():
                         help="Number of hidden units in feedforward network.")
     parser.add_argument("--n_filters", type=int, default=32,
                         help="Number of filters in convolutional network.")
+    parser.add_argument("--paddle_width", type=int, default=5,
+                        help="Width of the paddle in the Catch environment.")
 
     args = parser.parse_args()
     return args

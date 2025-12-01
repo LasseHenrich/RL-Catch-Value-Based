@@ -48,13 +48,14 @@ class CatchRLModule(LightningModule):
                  soft_update_tau: float = 1e-3,
                  hidden_size: int = 128,
                  n_filters: int = 32,
+                 paddle_width: int = 5,
                  *args: Any,
                  **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         # Does frame inspection to find parameters
         self.save_hyperparameters()
 
-        self.env = CatchEnv()
+        self.env = CatchEnv(paddle_width)
 
         n_actions = self.env.get_num_actions()
         state_shape = self.env.state_shape()
