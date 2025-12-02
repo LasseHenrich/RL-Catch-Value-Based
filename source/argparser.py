@@ -51,6 +51,8 @@ def get_args():
                         help="Number of filters in convolutional network.")
     parser.add_argument("--paddle_width", type=int, default=5,
                         help="Width of the paddle in the Catch environment.")
+    parser.add_argument("--ckpt_path", type=str, default=None,
+                        help="Path to a pre-trained model checkpoint to resume training from.")
 
     args = parser.parse_args()
     return args

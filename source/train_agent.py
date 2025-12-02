@@ -23,6 +23,7 @@ def train(hparams, config=None):
     csv_logger = CSVLogger(save_dir=LOGS_DIR)
 
     hparams: dict = vars(hparams)
+    ckpt_path = hparams.pop("ckpt_path")
     hparams.pop('run_name')
     max_epochs = hparams.pop('max_epochs')
     log_video = hparams.pop('log_video')
@@ -39,7 +40,7 @@ def train(hparams, config=None):
                       log_every_n_steps=1,
                       callbacks=callbacks,
                       )
-    trainer.fit(catch_module)
+    trainer.fit(catch_module, ckpt_path=ckpt_path)
 
 
 if __name__ == "__main__":
