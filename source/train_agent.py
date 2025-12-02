@@ -26,6 +26,7 @@ def train(hparams, config=None):
     hparams: dict = vars(hparams)
     ckpt_path = hparams.pop("ckpt_path")
     start_from_scratch_with_ckpt = hparams.pop("start_from_scratch_with_ckpt")
+    reinit_last_layer = hparams.pop("reinit_last_layer")
     hparams.pop('run_name')
     max_epochs = hparams.pop('max_epochs')
     log_video = hparams.pop('log_video')
@@ -42,7 +43,21 @@ def train(hparams, config=None):
         print(f"Loading model weights from {ckpt_path} for transfer learning, but starting training from scratch.")
         checkpoint = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
         catch_module.load_state_dict(checkpoint["state_dict"])
-        ckpt_path = None # Ensure trainer.fit starts from scratch
+
+        if reinit_last_layer:
+            print("Re-initializing last layer(s) of the network.")
+            # Re-initialize Q_network's last layer(s)
+            if hasattr(catch_module.Q_network, 'ff') and hasattr(catch_module.Q_network.ff, '__getitem__'):  # DeepQNetwork
+                catch_module.Q_network.ff[2].reset_parameters()
+            elif hasattr(catch_module.Q_network, 'ff_value'):  # DuelingDQN
+                catch_module.Q_network.ff_value[2].reset_parameters()
+                catch_module.Q_network.ff_advantage[2].reset_parameters()
+
+            # Re-initialize V_network's last layer if it exists
+            if hasattr(catch_module, 'V_network'):
+                catch_module.V_network.ff[2].reset_parameters()
+
+        ckpt_path = None  # Ensure trainer.fit starts from scratch
 
     trainer = Trainer(max_epochs=max_epochs,
                       logger=[logger, csv_logger],

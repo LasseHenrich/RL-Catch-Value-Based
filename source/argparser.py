@@ -55,6 +55,8 @@ def get_args():
                         help="Path to a pre-trained model checkpoint to resume training from.")
     parser.add_argument("--start_from_scratch_with_ckpt", action="store_true",
                         help="If a checkpoint path is provided, start training from scratch (epoch 0) using the checkpoint's weights, rather than resuming the full training state.")
+    parser.add_argument("--reinit_last_layer", action="store_true",
+                        help="When loading from a checkpoint, re-initialize the last layer with random weights.")
 
     args = parser.parse_args()
     return args
