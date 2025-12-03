@@ -29,6 +29,9 @@ def get_args():
                         help="Final epsilon")
     parser.add_argument("--epsilon_decay_rate", type=float, default=1000,
                         help="Number of steps to decay epsilon over")
+    parser.add_argument("--epsilon_decay_strategy", type=str, default="linear",
+                        choices=["linear", "exponential"],
+                        help="Strategy for epsilon decay")
     parser.add_argument("--buffer_capacity", type=int, default=1000,
                         help="Capacity of replay buffer, i.e., how many trajectories it can store")
     parser.add_argument("--replay_warmup_steps", type=int, default=100,
