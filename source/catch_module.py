@@ -49,6 +49,7 @@ class CatchRLModule(LightningModule):
                  hidden_size: int = 128,
                  n_filters: int = 32,
                  paddle_width: int = 5,
+                 noise: bool = False,
                  periodic_resetting_interval: int = 0,
                  periodic_resetting_strategy: str = "only_final",
                  max_epochs: int = 100,
@@ -59,7 +60,7 @@ class CatchRLModule(LightningModule):
         # Does frame inspection to find parameters
         self.save_hyperparameters()
 
-        self.env = CatchEnv(paddle_width)
+        self.env = CatchEnv(paddle_width, noise=noise)
 
         n_actions = self.env.get_num_actions()
         state_shape = self.env.state_shape()

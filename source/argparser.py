@@ -59,6 +59,8 @@ def get_args():
                         help="When loading from a checkpoint, re-initialize the last layer with random weights.")
     parser.add_argument("--periodic_resetting_interval", type=int, default=0,
                         help="If n > 0, re-initialize the last layer every n episodes.")
+    parser.add_argument("--noise", action="store_true",
+                        help="Add random noise to the background of the environment.")
     parser.add_argument("--periodic_resetting_strategy", type=str, default="only_final",
                         choices=["only_final", "all_ff"],
                         help="Strategy for periodic resetting of the last layer.")

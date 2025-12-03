@@ -4,18 +4,24 @@ import numpy as np
 
 
 class CatchEnv():
-    def __init__(self, paddle_width=5):
+    def __init__(self, paddle_width=5, noise=False):
         self.size = 21
         self.image = np.zeros((self.size, self.size))
+        self.background = np.zeros((self.size, self.size))
         self.state = []
         self.fps = 4
         self.output_shape = (84, 84)
 
         self.paddle_width = paddle_width
         self.radius = paddle_width // 2
+        self.noise = noise
 
     def reset_random(self):
-        self.image.fill(0)
+        if self.noise:
+            self.background = np.random.uniform(0, 0.8, size=self.image.shape)
+        else:
+            self.background.fill(0)
+        self.image = self.background.copy()
 
         min_pos = self.radius
         max_pos = self.size - self.radius - 1
@@ -44,9 +50,15 @@ class CatchEnv():
         def noop():
             pass
 
-        {0: left, 1: right, 2: noop}[action]()
+        # Erase previous paddle
+        slice_start = self.pos - self.radius
+        slice_end = self.pos - self.radius + self.paddle_width
+        self.image[-5, slice_start:slice_end] = self.background[-5, slice_start:slice_end]
 
-        self.image[self.bally, self.ballx] = 0
+        action_fn = {0: left, 1: right, 2: noop}[action]
+        action_fn()
+
+        self.image[self.bally, self.ballx] = self.background[self.bally, self.ballx]
         self.ballx += self.vx
         self.bally += self.vy
         if self.ballx > self.size - 1:
@@ -57,7 +69,6 @@ class CatchEnv():
             self.vx *= -1
         self.image[self.bally, self.ballx] = 1
 
-        self.image[-5].fill(0)
         slice_start = self.pos - self.radius
         slice_end = self.pos - self.radius + self.paddle_width
         self.image[-5, slice_start:slice_end] = 1
