@@ -10,7 +10,7 @@ class EpsilonDecay():
 
     def __call__(self, t): # todo: change this to be linear
         factor: float
-        linear = False # otherwise exponential
+        linear = True # otherwise exponential
         if linear:
             factor = max(0.0, 1.0 - t / self.decay_rate)
         else:
