@@ -1,3 +1,5 @@
+Note that this fork only suppors DQN and adds many parameters controlling it. Support for the rest has been dropped.
+Description of base repo:
 # Deep Value-Based Reinforcement Learning
 An implementation of the following methods: Deep Q-Network (DQN), Double Deep Q-Network (DDQN), Dueling Architecture, Deep Quality-Value (DQV), and DQV-max. The implementation is based on the following papers:
 - [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/abs/1312.5602)
